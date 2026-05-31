@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3DNJFV6TN0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3DNJFV6TN0');
+  </script>
+  <meta name="google" content="notranslate">
+  <meta http-equiv="Content-Language" content="en">
+  <meta name="description" content="Digital art by Takechan — Dragons, characters, abstract designs, and more.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Takechan art gallery</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="takart512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="takart192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="takart180.png">
+  <meta name="apple-mobile-web-app-title" content="TAKART">
+  <meta name="application-name" content="TAKART">
+  <meta property="og:title" content="Takechan art gallery">
+  <meta property="og:description" content="Digital art by Takechan — Dragons, characters, abstract designs, and more.">
+  <meta property="og:image" content="https://takart.pages.dev/ogp.png">
+  <meta property="og:url" content="https://takart.pages.dev">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://takart.pages.dev/ogp.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #fff;
+      color: #000;
+      font-family: Georgia, 'Times New Roman', serif;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 0;
+    }
+
+    /* ── メインのブロック：全部まとめて中央に ── */
+    .main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .site-title {
+      font-size: 16px;
+      letter-spacing: 0.2em;
+      color: #000;
+      margin-bottom: 48px;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: #000;
+      letter-spacing: 0.05em;
+      padding: 12px 0;
+      display: block;
+      width: 100%;
+      position: relative;
+      transition: opacity 0.25s, transform 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      text-align: center;
+    }
+
+    /* 常に薄い短い下線をチラ見えさせる */
+    .nav-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 50%; height: 2px;
+      background: #999;
+      transition: width 0.35s ease, background 0.3s ease;
+    }
+
+    .nav-btn:hover::after,
+    .nav-btn:focus::after { width: 40%; background: #000; }
+    .nav-btn:hover { opacity: 0.55; }
+    .nav-btn:active { transform: scale(0.97); opacity: 0.4; }
+
+    /* ヒントテキスト */
+    .tap-hint {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: #ccc;
+      margin-top: 8px;
+      margin-bottom: 40px;
+      text-transform: uppercase;
+    }
+
+    .footer-link {
+      margin-top: 112px;
+      margin-left: -1em;
+      font-size: 15px;
+      letter-spacing: 0.14em;
+    }
+
+    .footer-link a {
+      color: #999;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-link a:hover { color: #000; }
+
+    /* ── Overlay ── */
+    #overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.97);
+      z-index: 100;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #overlay.active { display: flex; }
+
+    #media-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 90vw;
+      height: 78vh;
+    }
+
+    #media-wrap img,
+    #media-wrap video {
+      display: block;
+      max-width: 88vw;
+      max-height: 76vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    #overlay-controls {
+      position: fixed;
+      bottom: 36px;
+      left: 0; width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+    }
+
+    #overlay-controls button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 14px;
+      letter-spacing: 0.14em;
+      color: #000;
+      padding: 4px 0;
+      position: relative;
+      transition: opacity 0.2s;
+    }
+
+    #overlay-controls button::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 1px;
+      background: #000;
+      transition: width 0.3s ease;
+    }
+
+    #overlay-controls button:hover::after { width: 100%; }
+    #overlay-controls button:hover { opacity: 0.45; }
+
+    #overlay-label {
+      position: fixed;
+      top: 36px; left: 44px;
+      font-size: 15px;
+      letter-spacing: 0.14em;
+      color: #bbb;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main">
+    <div class="site-title">Takechan art gallery</div>
+    <button class="nav-btn" onclick="openGallery('dragons')">Dragons</button>
+    <button class="nav-btn" onclick="openGallery('others')">Others</button>
+    <button class="nav-btn" onclick="openGallery('characters')">Characters</button>
+    <button class="nav-btn" onclick="openGallery('designs')">Designs</button>
+    <div class="footer-link">
+      <a href="https://sintaichoseijyuku.pages.dev/" target="_blank" onclick="sbLog('link_click',{extra_val:'takechan'})">▶ Takechan</a>
+    </div>
+  </div>
+
+  <div id="overlay">
+    <span id="overlay-label"></span>
+    <div id="media-wrap"></div>
+    <div id="overlay-controls">
+      <button onclick="showMore()">More</button>
+      <button onclick="closeOverlay()">Close</button>
+    </div>
+  </div>
+
+<script>
+  // ── Supabase Analytics ──────────────────────────────────────────
+  const SB_URL = 'https://itraumqgammtgiouipak.supabase.co';
+  const SB_KEY = 'sb_publishable_ySnnol1KpqNs2yBxqkOVHQ_NZP_J8ZN';
+  const _pageStart = Date.now();
+
+  // SNSリファラー判定
+  function detectSnsReferrer() {
+    const ref = document.referrer || '';
+    if (/x\.com|twitter\.com/i.test(ref))    return 'x';
+    if (/bsky\.app|bsky\.social/i.test(ref)) return 'bluesky';
+    if (/threads\.net/i.test(ref))           return 'threads';
+    if (ref) return 'other';
+    return 'direct';
+  }
+
+  // 共通ログ送信（fire-and-forget）
+  async function sbLog(event, extra = {}) {
+    try {
+      await fetch(`${SB_URL}/rest/v1/gallery_events`, {
+        method: 'POST',
+        headers: {
+          'apikey': SB_KEY,
+          'Authorization': `Bearer ${SB_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          event,
+          category:  extra.category  ?? null,
+          referrer:  extra.referrer  ?? (document.referrer || null),
+          lang:      extra.lang      ?? (navigator.language || null),
+          filename:  extra.filename  ?? null,
+          extra_val: extra.extra_val ?? null,
+        })
+      });
+    } catch(_) {}
+  }
+
+  // media_stats upsert（作品ビュー数）
+  async function sbMediaView(category, filename) {
+    try {
+      await fetch(`${SB_URL}/rest/v1/gallery_media_stats`, {
+        method: 'POST',
+        headers: {
+          'apikey': SB_KEY,
+          'Authorization': `Bearer ${SB_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates,return=minimal'
+        },
+        body: JSON.stringify({ category, filename, views: 1 })
+      });
+      // ※ Supabase側で views = views + 1 にするには RPC or trigger が必要
+      // 簡易版：まずinsert、既存なら別途 increment RPC を呼ぶ
+      await fetch(`${SB_URL}/rest/v1/rpc/increment_media_view`, {
+        method: 'POST',
+        headers: {
+          'apikey': SB_KEY,
+          'Authorization': `Bearer ${SB_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ p_category: category, p_filename: filename })
+      });
+    } catch(_) {}
+  }
+
+  // ① page_view（初回）
+  (function() {
+    const sns = detectSnsReferrer();
+    sbLog('page_view', { referrer: document.referrer || null, lang: navigator.language });
+    if (sns !== 'direct' && sns !== 'other') {
+      sbLog('sns_referrer', { extra_val: sns, lang: navigator.language });
+    }
+  })();
+
+  // ② stay_duration（離脱時）
+  window.addEventListener('pagehide', () => {
+    const sec = Math.round((Date.now() - _pageStart) / 1000);
+    navigator.sendBeacon
+      ? navigator.sendBeacon(`${SB_URL}/rest/v1/gallery_events`,
+          new Blob([JSON.stringify({
+            event: 'stay_duration',
+            extra_val: String(sec),
+            referrer: document.referrer || null,
+            lang: navigator.language || null,
+            category: null, filename: null
+          })], { type: 'application/json' }))
+      : sbLog('stay_duration', { extra_val: String(sec) });
+  });
+  // ── /Supabase Analytics ─────────────────────────────────────────
+
+  const registry = {
+    dragons: [
+      ...Array.from({length: 30}, (_, i) => ({ file: `drm${String(i+1).padStart(2,'0')}.mp4`, type: 'video' })),
+      ...Array.from({length: 30}, (_, i) => ({ file: `drp${String(i+1).padStart(2,'0')}.png`,  type: 'image' })),
+    ],
+    others: [
+      ...Array.from({length: 30}, (_, i) => ({ file: `otm${String(i+1).padStart(2,'0')}.mp4`, type: 'video' })),
+      ...Array.from({length: 30}, (_, i) => ({ file: `otp${String(i+1).padStart(2,'0')}.png`,  type: 'image' })),
+    ],
+    characters: [
+      ...Array.from({length: 30}, (_, i) => ({ file: `chm${String(i+1).padStart(2,'0')}.mp4`, type: 'video' })),
+      ...Array.from({length: 30}, (_, i) => ({ file: `chp${String(i+1).padStart(2,'0')}.png`,  type: 'image' })),
+    ],
+    designs: [
+      ...Array.from({length: 30}, (_, i) => ({ file: `dem${String(i+1).padStart(2,'0')}.mp4`, type: 'video' })),
+      ...Array.from({length: 30}, (_, i) => ({ file: `dep${String(i+1).padStart(2,'0')}.png`,  type: 'image' })),
+    ],
+  };
+
+  let currentCategory = null;
+  let availableFiles  = [];
+  let shownIndexes    = [];
+  let checkedCache    = {};
+
+  function checkFile({ file, type }) {
+    return new Promise(resolve => {
+      if (type === 'image') {
+        const img = new Image();
+        img.onload  = () => resolve({ file, type });
+        img.onerror = () => resolve(null);
+        img.src = file;
+      } else {
+        const v = document.createElement('video');
+        const timer = setTimeout(() => resolve(null), 8000); // 8秒タイムアウト
+        v.onloadedmetadata = () => { clearTimeout(timer); resolve({ file, type }); };
+        v.onerror = () => { clearTimeout(timer); resolve(null); };
+        v.preload = 'metadata';
+        v.src = file;
+      }
+    });
+  }
+
+  async function openGallery(cat) {
+    currentCategory = cat;
+    sbLog('category_click', { category: cat }); // ③ category_click
+    document.getElementById('overlay-label').textContent =
+      cat.charAt(0).toUpperCase() + cat.slice(1);
+    document.getElementById('media-wrap').innerHTML =
+      '<span style="font-size:12px;color:#ccc;letter-spacing:.1em;">loading...</span>';
+    document.getElementById('overlay').classList.add('active');
+
+    if (!checkedCache[cat]) {
+      const results = await Promise.all(registry[cat].map(checkFile));
+      checkedCache[cat] = results.filter(Boolean);
+    }
+
+    availableFiles = checkedCache[cat];
+    shownIndexes   = [];
+
+    if (availableFiles.length === 0) {
+      document.getElementById('media-wrap').innerHTML =
+        '<span style="font-size:12px;color:#bbb;letter-spacing:.1em;font-style:italic;">no files yet</span>';
+      return;
+    }
+
+    showRandom();
+  }
+
+  function showRandom() {
+    if (!availableFiles || availableFiles.length === 0) return;
+    if (shownIndexes.length >= availableFiles.length) shownIndexes = [];
+    const remaining = availableFiles.map((_,i) => i).filter(i => !shownIndexes.includes(i));
+    if (remaining.length === 0) { shownIndexes = []; return showRandom(); }
+    const pick = remaining[Math.floor(Math.random() * remaining.length)];
+    shownIndexes.push(pick);
+    renderMedia(availableFiles[pick]);
+  }
+
+  function renderMedia({ file, type }) {
+    const wrap = document.getElementById('media-wrap');
+    wrap.innerHTML = '';
+    // ④ media_view
+    sbLog('media_view', { category: currentCategory, filename: file });
+    sbMediaView(currentCategory, file);
+    if (type === 'video') {
+      const v = document.createElement('video');
+      v.src = file;
+      v.autoplay = true;
+      v.loop     = true;
+      v.muted    = true;
+      v.playsInline = true;
+      // エラーが出ても次の作品に進むだけ、オーバーレイは閉じない
+      v.onerror = () => { if (availableFiles.length > 1) showRandom(); };
+      wrap.appendChild(v);
+    } else {
+      const img = document.createElement('img');
+      img.src = file;
+      img.alt = file;
+      // エラーが出ても次の作品に進むだけ
+      img.onerror = () => { if (availableFiles.length > 1) showRandom(); };
+      wrap.appendChild(img);
+    }
+  }
+
+  function showMore() {
+    if (availableFiles.length > 0) {
+      sbLog('more_click', { category: currentCategory }); // ⑤ more_click
+      showRandom();
+    }
+  }
+
+  function closeOverlay() {
+    document.getElementById('overlay').classList.remove('active');
+    document.getElementById('media-wrap').innerHTML = '';
+    currentCategory = null;
+  }
+
+  document.getElementById('overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeOverlay();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeOverlay();
+    if ((e.key === 'ArrowRight' || e.key === ' ') &&
+        document.getElementById('overlay').classList.contains('active')) {
+      e.preventDefault();
+      showMore();
+    }
+  });
+</script>
+</body>
+</html>
