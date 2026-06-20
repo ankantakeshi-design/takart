@@ -193,6 +193,56 @@
     }
 
     #save-btn.saving { opacity: 0.4; pointer-events: none; }
+
+    /* ── 確認モーダル ── */
+    #confirm-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    #confirm-modal.active { display: flex; }
+
+    #confirm-box {
+      background: #fff;
+      max-width: 320px;
+      width: 86%;
+      padding: 28px 24px 22px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    #confirm-text {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #222;
+      white-space: pre-line;
+      margin-bottom: 22px;
+    }
+
+    #confirm-actions {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+    }
+
+    #confirm-actions button {
+      background: none;
+      border: 1px solid #000;
+      cursor: pointer;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      color: #000;
+      padding: 8px 18px;
+      transition: opacity 0.2s;
+    }
+    #confirm-actions button:active { opacity: 0.5; }
+    #confirm-actions #confirm-no { border-color: #ccc; color: #888; }
   </style>
 </head>
 <body>
@@ -215,6 +265,16 @@
       <button id="save-btn" onclick="saveCurrentMedia()" hidden>Save</button>
       <button onclick="showMore()">More</button>
       <button onclick="closeOverlay()">Close</button>
+    </div>
+  </div>
+
+  <div id="confirm-modal">
+    <div id="confirm-box">
+      <p id="confirm-text"></p>
+      <div id="confirm-actions">
+        <button id="confirm-yes">はい</button>
+        <button id="confirm-no">キャンセル</button>
+      </div>
     </div>
   </div>
 
@@ -402,10 +462,19 @@
     }
   }
 
-  async function saveCurrentMedia() {
+  function saveCurrentMedia() {
     if (!currentMediaFile || !isDownloadOpen()) return;
     if (remainingSavesToday() <= 0) return; // 1日の上限に達している
-    if (!window.confirm('本当にダウンロードしますか？\nOKすると本日のダウンロード回数が消費されるのでご注意ください。')) return; // ミスタップ防止
+    document.getElementById('confirm-text').textContent =
+      '本当にダウンロードしますか？\nOKすると本日のダウンロード回数が消費されるのでご注意ください。';
+    document.getElementById('confirm-modal').classList.add('active');
+  }
+
+  // 「はい」ボタンのクリック自体がユーザー操作の起点になるよう、
+  // ここから直接ダウンロード処理を呼ぶ（iOS Safariでの活性化切れ対策）
+  document.getElementById('confirm-yes').addEventListener('click', async function() {
+    document.getElementById('confirm-modal').classList.remove('active');
+    if (!currentMediaFile || !isDownloadOpen() || remainingSavesToday() <= 0) return;
     const btn = document.getElementById('save-btn');
     btn.classList.add('saving');
     try {
@@ -427,7 +496,11 @@
     } finally {
       updateSaveButtonVisibility();
     }
-  }
+  });
+
+  document.getElementById('confirm-no').addEventListener('click', function() {
+    document.getElementById('confirm-modal').classList.remove('active');
+  });
   // ── /期間限定ダウンロード設定 ────────────────────────────────────
 
   const registry = {
